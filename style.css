@@ -80,6 +80,10 @@ form button:hover {
     background: rgb(33, 189, 33);
 }
 
+.trash-btn{
+    background: rgb(207, 2, 2);
+}
+
 .todo-item{
     padding: 0rem .5rem;
 }
