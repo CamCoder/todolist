@@ -68,6 +68,11 @@ function deleteCheck(e){
     if(item.classList[0] === "complete-btn"){
         const todo = item.parentElement;
         todo.classList.toggle("completed");
+        
+
+
+        saveCompletedTodo(todo);
+
     }
 }
 
@@ -104,6 +109,7 @@ function filterTodo(e){
 function saveLocalTodos(todo){
     //Check
     let todos;
+
     if(localStorage.getItem('todos') === null){
         todos = [];
     }
@@ -117,11 +123,20 @@ function saveLocalTodos(todo){
 
 function getTodos(){
     let todos;
+    let completedtodos;
+
     if(localStorage.getItem('todos') === null){
         todos = [];
     }
     else{
         todos = JSON.parse(localStorage.getItem('todos'));
+    }
+
+    if(localStorage.getItem('completedtodos') === null){
+        completedtodos = [];
+    }
+    else{
+        completedtodos = JSON.parse(localStorage.getItem('completedtodos'));
     }
 
     todos.forEach(function(todo){
@@ -132,8 +147,17 @@ function getTodos(){
         //Create LI
         const newTodo = document.createElement('li');
         newTodo.classList.add('todo-item');
+
+        //check if save item is completed
+            for(let i = 0; i < completedtodos.length; i++){
+                if( todo == completedtodos[i]){
+                    todoDiv.classList.add("completed");
+                }
+            }
+ 
         newTodo.innerText = todo;
         todoDiv.appendChild(newTodo);
+
 
         //Check mark button
         const completedButton = document.createElement('button');
@@ -165,4 +189,53 @@ function removeLocalTodo(todo){
     const todoIndex = todo.children[0].innerText;
     todos.splice(todos.indexOf(todoIndex), 1);
     localStorage.setItem('todos', JSON.stringify(todos));
+
+    if(localStorage.getItem('completedtodos') === null){
+        todos = [];
+    }
+    else{
+        todos = JSON.parse(localStorage.getItem('completedtodos'));
+    }
+
+    const todoCompletedIndex = todo.children[0].innerText;
+    todos.splice(todos.indexOf(todoCompletedIndex), 1);
+    localStorage.setItem('completedtodos', JSON.stringify(todos));
+}
+
+function saveCompletedTodo(todo){
+    let todos;
+    let item;
+    if (todo.classList.contains("completed")){
+        item = todo.innerText;
+        console.log(todos);
+
+        if(localStorage.getItem('completedtodos') === null){
+            todos = [];
+        }
+        else{
+            todos = JSON.parse(localStorage.getItem('completedtodos'));
+        }
+
+        todos.push(item);
+        localStorage.setItem('completedtodos', JSON.stringify(todos));
+    }
+    else {
+
+        if(localStorage.getItem('completedtodos') === null){
+            todos = [];
+        }
+        else{
+            todos = JSON.parse(localStorage.getItem('completedtodos'));
+        }
+
+        const todoIndex = todo.children[0].innerText;
+        todos.splice(todos.indexOf(todoIndex), 1);
+        localStorage.setItem('completedtodos', JSON.stringify(todos));
+
+        
+    }
+
+
+    
+
 }
